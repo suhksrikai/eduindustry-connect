@@ -1,9 +1,18 @@
 'use client';
 
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { SiteShell } from '@/components/site-shell';
 
 export default function Home() {
+  const router = useRouter();
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Waitlist form state
+  const [waitlist, setWaitlist] = useState({ name: '', org: '', email: '', role: '' });
+  const [joined, setJoined] = useState(false);
 
   const faqs = [
     {
@@ -65,37 +74,8 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-teal-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">BC</span>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
-                BeyondClassrooms
-              </span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-                For Schools
-              </a>
-              <a href="#" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-                For Partners
-              </a>
-              <a href="#" className="text-sm font-medium text-gray-700 hover:text-blue-600">
-                Experiences
-              </a>
-              <button className="rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-2 text-sm font-semibold text-white hover:opacity-90 transition">
-                Get Started
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <SiteShell>
+      <div suppressHydrationWarning className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-slate-900 via-blue-900 to-teal-900 py-20 md:py-32 overflow-hidden relative">
         <div className="absolute inset-0 overflow-hidden">
@@ -119,27 +99,148 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="rounded-lg bg-gradient-to-r from-blue-500 to-teal-500 px-8 py-4 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition duration-300">
+                <Link href="/experiences" className="rounded-lg bg-gradient-to-r from-blue-500 to-teal-500 px-8 py-4 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition duration-300 text-center">
                   Explore Experiences
-                </button>
-                <button className="rounded-lg border-2 border-white/30 hover:border-white/60 px-8 py-4 text-white font-semibold backdrop-blur-sm transition duration-300">
+                </Link>
+                <Link href="/for-partners" className="rounded-lg border-2 border-white/30 hover:border-white/60 px-8 py-4 text-white font-semibold backdrop-blur-sm transition duration-300 text-center">
                   Become a Partner
-                </button>
+                </Link>
               </div>
             </div>
 
-            {/* Hero Image Placeholder */}
+            {/* Hero visual section */}
             <div className="relative">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-400/20 to-teal-400/20 blur-3xl"></div>
-              <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-blue-400/10 to-teal-400/10 border border-blue-400/30 backdrop-blur-sm flex items-center justify-center">
-                <div className="text-center">
-                  <svg className="w-32 h-32 mx-auto text-blue-300/40 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <p className="text-blue-200 font-medium">Hero image goes here</p>
+              <div className="relative grid grid-cols-1 gap-4 rounded-2xl lg:grid-cols-[1.3fr_0.7fr]">
+                <div className="rounded-2xl border border-white/20 bg-gradient-to-br from-blue-600/20 to-teal-500/20 p-6 shadow-2xl backdrop-blur-sm">
+                  <div className="rounded-2xl border border-white/20 bg-slate-950/70 p-6 shadow-inner">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-200">Industry Visits</p>
+                        <h3 className="mt-2 text-2xl font-semibold text-white">Students exploring innovation</h3>
+                      </div>
+                      <div className="rounded-full bg-teal-500/20 px-3 py-1 text-sm font-medium text-teal-200">
+                        Live learning
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                        <p className="text-sm text-blue-100">Technology</p>
+                        <p className="mt-2 text-2xl font-semibold text-white">AI & Robotics</p>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                        <p className="text-sm text-blue-100">Manufacturing</p>
+                        <p className="mt-2 text-2xl font-semibold text-white">EV Systems</p>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                        <p className="text-sm text-blue-100">Healthcare</p>
+                        <p className="mt-2 text-2xl font-semibold text-white">Career Discovery</p>
+                      </div>
+                      <div className="rounded-xl border border-white/10 bg-white/10 p-4">
+                        <p className="text-sm text-blue-100">Sustainability</p>
+                        <p className="mt-2 text-2xl font-semibold text-white">Renewable Energy</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-sm">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-teal-500 text-lg font-semibold text-white">
+                      ✦
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">STEM Learning</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-blue-100">
+                      Real-world experiences that connect theory, curiosity, and future careers.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-sm">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-lg font-semibold text-white">
+                      ↗
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">Innovation Hub</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-blue-100">
+                      Designed for schools seeking inspiring, curriculum-aligned industry engagement.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Join Waitlist */}
+      <section id="waitlist" className="py-16 bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="mx-auto max-w-4xl px-6 lg:px-8">
+          <div suppressHydrationWarning className="bg-white rounded-2xl p-8 shadow-md border border-gray-200">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Join the Waitlist</h2>
+            <p className="text-gray-600 mb-6">Be the first to know about new experiences and partner opportunities.</p>
+
+            {!joined ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setJoined(true);
+                }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                <input
+                  value={waitlist.name}
+                  onChange={(e) => setWaitlist({ ...waitlist, name: e.target.value })}
+                  placeholder="Name"
+                  className="rounded-lg border border-gray-300 px-4 py-3"
+                  required
+                />
+
+                <input
+                  value={waitlist.org}
+                  onChange={(e) => setWaitlist({ ...waitlist, org: e.target.value })}
+                  placeholder="School / Organisation"
+                  className="rounded-lg border border-gray-300 px-4 py-3"
+                  required
+                />
+
+                <input
+                  type="email"
+                  value={waitlist.email}
+                  onChange={(e) => setWaitlist({ ...waitlist, email: e.target.value })}
+                  placeholder="Email"
+                  className="rounded-lg border border-gray-300 px-4 py-3 md:col-span-2"
+                  required
+                />
+
+                <input
+                  value={waitlist.role}
+                  onChange={(e) => setWaitlist({ ...waitlist, role: e.target.value })}
+                  placeholder="Role (e.g. Teacher, Coordinator)"
+                  className="rounded-lg border border-gray-300 px-4 py-3 md:col-span-2"
+                  required
+                />
+
+                <div className="md:col-span-2 text-right">
+                  <button type="submit" className="rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-3 text-white font-semibold">
+                    Join Waitlist
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="text-center py-8">
+                <h3 className="text-lg font-semibold text-gray-900">Thanks — you’re on the waitlist!</h3>
+                <p className="text-gray-600 mt-2">We’ll email you when new opportunities and partner invites are available.</p>
+                <button
+                  onClick={() => {
+                    setJoined(false);
+                    setWaitlist({ name: '', org: '', email: '', role: '' });
+                  }}
+                  className="mt-6 rounded-lg border border-gray-300 px-6 py-2"
+                >
+                  Add another
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -149,16 +250,16 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { number: '500+', label: 'Schools Connected' },
-              { number: '250+', label: 'Industry Partners' },
-              { number: '10,000+', label: 'Students Engaged' },
-              { number: '100%', label: 'Curriculum Aligned' },
+              { title: 'Curriculum Aligned', desc: 'Aligned to curriculum outcomes and standards' },
+              { title: 'Industry Led', desc: 'Delivered by experienced industry partners' },
+              { title: 'Real World Learning', desc: 'Hands-on experiences connecting theory to practice' },
+              { title: 'Australia Wide', desc: 'Available across Australia' },
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent mb-2">
-                  {stat.number}
+                  {stat.title}
                 </div>
-                <p className="text-gray-600 font-medium">{stat.label}</p>
+                <p className="text-gray-600 font-medium">{stat.desc}</p>
               </div>
             ))}
           </div>
@@ -178,10 +279,19 @@ export default function Home() {
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                const trimmed = searchQuery.trim();
+                router.push(`/experiences${trimmed ? `?search=${encodeURIComponent(trimmed)}` : ''}`);
+              }}
+              className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200"
+            >
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <input
                   type="text"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Curriculum outcome"
                   className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -195,14 +305,14 @@ export default function Home() {
                   placeholder="Industry"
                   className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <button className="rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-3 text-white font-semibold hover:shadow-lg transition">
+                <button type="submit" className="rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 px-6 py-3 text-white font-semibold hover:shadow-lg transition">
                   Search
                 </button>
               </div>
               <p className="text-sm text-gray-500">
                 Explore 1000+ curriculum-aligned experiences ready to inspire your students
               </p>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -453,12 +563,12 @@ export default function Home() {
             Join 500+ schools and 250+ industry partners creating meaningful educational experiences that inspire students and shape careers.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="rounded-lg bg-white px-8 py-4 text-blue-600 font-semibold hover:shadow-2xl transition duration-300">
+            <Link href="/for-schools" className="rounded-lg bg-white px-8 py-4 text-blue-600 font-semibold hover:shadow-2xl transition duration-300 text-center">
               Start as a School
-            </button>
-            <button className="rounded-lg border-2 border-white text-white px-8 py-4 font-semibold hover:bg-white/10 transition duration-300">
+            </Link>
+            <Link href="/for-partners" className="rounded-lg border-2 border-white text-white px-8 py-4 font-semibold hover:bg-white/10 transition duration-300 text-center">
               Become a Partner
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -474,16 +584,17 @@ export default function Home() {
               Contact our team or explore our help center
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="rounded-lg bg-blue-600 px-8 py-3 text-white font-semibold hover:bg-blue-700 transition">
+              <Link href="/contact" className="rounded-lg bg-blue-600 px-8 py-3 text-white font-semibold hover:bg-blue-700 transition text-center">
                 Contact Us
-              </button>
-              <button className="rounded-lg border border-gray-300 px-8 py-3 font-semibold hover:bg-gray-50 transition">
+              </Link>
+              <Link href="/resources" className="rounded-lg border border-gray-300 px-8 py-3 font-semibold hover:bg-gray-50 transition text-center">
                 View Documentation
-              </button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
-    </main>
+      </div>
+    </SiteShell>
   );
 }
